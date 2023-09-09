@@ -36,9 +36,9 @@ public class SecaoProcessoEleitoralService {
                 id.getSiglaUF(),
                 id.getCodigoTSEProcessoEleitoral()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma relação entre seção e processo eleitoral identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma relação entre seção e processo eleitoral identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

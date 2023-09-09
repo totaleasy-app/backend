@@ -29,9 +29,9 @@ public class OrigemBoletimUrnaService {
     public OrigemBoletimUrna findByNomeAbreviado(String nomeAbreviado) {
         return this.origemBoletimUrnaRepository
             .findByNomeAbreviadoEqualsIgnoreCase(nomeAbreviado)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma origem de boletim de urna com o nome abreviado '%s'.", nomeAbreviado));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma origem de boletim de urna com o nome abreviado '%s'.", nomeAbreviado)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

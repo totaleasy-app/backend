@@ -29,9 +29,9 @@ public class GeneroService {
     public Genero findByCodigoTSE(Integer codigoTSE) {
         return this.generoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum gênero com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum gênero com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

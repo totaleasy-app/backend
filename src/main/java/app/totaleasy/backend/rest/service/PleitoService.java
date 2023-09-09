@@ -34,9 +34,9 @@ public class PleitoService {
     public Pleito findByCodigoTSE(Integer codigoTSE) {
         return this.pleitoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum pleito com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum pleito com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

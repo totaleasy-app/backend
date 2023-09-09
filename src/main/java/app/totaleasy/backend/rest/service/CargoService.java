@@ -41,9 +41,9 @@ public class CargoService {
     public Cargo findByCodigoTSE(Integer codigoTSE) {
         return this.cargoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum cargo com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum cargo com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

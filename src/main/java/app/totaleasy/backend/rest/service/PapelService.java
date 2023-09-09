@@ -28,9 +28,9 @@ public class PapelService {
     public Papel findByNome(String nome) {
         return this.papelRepository
             .findByNomeEqualsIgnoreCase(nome)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum papel de usuário com o nome '%s'.", nome));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum papel de usuário com o nome '%s'.", nome)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

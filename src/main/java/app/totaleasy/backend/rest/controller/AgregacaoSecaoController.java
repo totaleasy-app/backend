@@ -12,7 +12,9 @@ import app.totaleasy.backend.rest.dto.id.AgregacaoSecaoIdDTO;
 import app.totaleasy.backend.rest.dto.retrieval.AgregacaoSecaoRetrievalDTO;
 import app.totaleasy.backend.rest.mapper.AgregacaoSecaoMapper;
 import app.totaleasy.backend.rest.service.AgregacaoSecaoService;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,12 +28,8 @@ public class AgregacaoSecaoController {
 
     @GetMapping(
         params = {
-            "numeroTSESecaoPrincipal",
-            "numeroTSEZonaSecaoPrincipal",
-            "siglaUFSecaoPrincipal",
-            "numeroTSESecaoAgregada",
-            "numeroTSEZonaSecaoAgregada",
-            "siglaUFSecaoAgregada",
+            "numeroTSESecaoPrincipal", "numeroTSEZonaSecaoPrincipal", "siglaUFSecaoPrincipal",
+            "numeroTSESecaoAgregada", "numeroTSEZonaSecaoAgregada", "siglaUFSecaoAgregada",
             "codigoTSEProcessoEleitoral"
         }
     )

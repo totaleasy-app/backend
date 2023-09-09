@@ -38,9 +38,9 @@ public class AgregacaoSecaoService {
                 id.getSiglaUFSecaoAgregada(),
                 id.getCodigoTSEProcessoEleitoral()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma agregação de seção identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma agregação de seção identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

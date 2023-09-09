@@ -29,9 +29,9 @@ public class UrnaEletronicaService {
     public UrnaEletronica findByNumeroSerie(Integer numeroSerie) {
         return this.urnaEletronicaRepository
             .findByNumeroSerie(numeroSerie)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma urna eletrônica com o número de série %d.", numeroSerie));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma urna eletrônica com o número de série %d.", numeroSerie)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

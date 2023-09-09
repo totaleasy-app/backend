@@ -25,9 +25,9 @@ public class RegiaoService {
     public Regiao findBySigla(String sigla) {
         return this.regiaoRepository
             .findBySiglaEqualsIgnoreCase(sigla)
-            .orElseThrow(() -> {
-              throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma região com a sigla '%s'.", sigla));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma região com a sigla '%s'.", sigla)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

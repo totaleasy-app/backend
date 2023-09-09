@@ -73,9 +73,9 @@ public class BoletimUrnaService {
                 id.getSiglaUF(),
                 id.getCodigoTSEPleito()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum boletim de urna identificado por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum boletim de urna identificado por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

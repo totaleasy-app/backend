@@ -38,9 +38,9 @@ public class CandidaturaService {
                 id.getCodigoTSECargo(),
                 id.getCodigoTSEEleicao()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma candidatura identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma candidatura identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

@@ -36,9 +36,9 @@ public class ProcessoEleitoralService {
     public ProcessoEleitoral findByCodigoTSE(Integer codigoTSE) {
         return this.processoEleitoralRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum processo eleitoral com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum processo eleitoral com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

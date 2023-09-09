@@ -29,9 +29,9 @@ public class OcupacaoService {
     public Ocupacao findByCodigoTSE(Integer codigoTSE) {
         return this.ocupacaoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma ocupação com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma ocupação com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

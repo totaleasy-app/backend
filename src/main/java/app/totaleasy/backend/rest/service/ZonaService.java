@@ -52,9 +52,9 @@ public class ZonaService {
 
         return this.zonaRepository
             .findByNumeroTSEAndUfSiglaEqualsIgnoreCase(id.getNumeroTSEZona(), id.getSiglaUF())
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma zona identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma zona identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

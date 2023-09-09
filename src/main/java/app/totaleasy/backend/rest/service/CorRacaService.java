@@ -29,9 +29,9 @@ public class CorRacaService {
     public CorRaca findByCodigoTSE(Integer codigoTSE) {
         return this.corRacaRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma cor/raça com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma cor/raça com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

@@ -55,9 +55,9 @@ public class CargoEleicaoService {
     public CargoEleicao findById(CargoEleicaoIdDTO id) {
         return this.cargoEleicaoRepository
             .findByCargoCodigoTSEAndEleicaoCodigoTSE(id.getCodigoTSECargo(), id.getCodigoTSEEleicao())
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma relação entre cargo e eleição identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma relação entre cargo e eleição identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

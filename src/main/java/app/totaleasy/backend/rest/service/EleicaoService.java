@@ -41,9 +41,9 @@ public class EleicaoService {
     public Eleicao findByCodigoTSE(Integer codigoTSE) {
         return this.eleicaoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma eleição com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma eleição com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

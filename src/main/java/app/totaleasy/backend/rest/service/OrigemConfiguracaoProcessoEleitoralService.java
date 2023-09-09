@@ -29,9 +29,9 @@ public class OrigemConfiguracaoProcessoEleitoralService {
     public OrigemConfiguracaoProcessoEleitoral findByNomeAbreviado(String nomeAbreviado) {
         return this.origemConfiguracaoProcessoEleitoralRepository
             .findByNomeAbreviadoEqualsIgnoreCase(nomeAbreviado)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma origem de configuração de processo eleitoral com o nome abreviado '%s'.", nomeAbreviado));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma origem de configuração de processo eleitoral com o nome abreviado '%s'.", nomeAbreviado)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

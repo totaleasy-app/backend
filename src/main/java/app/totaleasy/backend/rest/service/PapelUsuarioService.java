@@ -30,9 +30,9 @@ public class PapelUsuarioService {
                 id.getUsername(),
                 id.getNomePapel()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma relação do usuário '%s' com o papel '%s'.", id.getUsername(), id.getNomePapel()));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma relação do usuário '%s' com o papel '%s'.", id.getUsername(), id.getNomePapel())
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

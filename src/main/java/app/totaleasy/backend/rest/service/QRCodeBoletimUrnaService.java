@@ -36,9 +36,9 @@ public class QRCodeBoletimUrnaService {
                 id.getSiglaUF(),
                 id.getCodigoTSEPleito()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum QR code de boletim de urna identificado por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum QR code de boletim de urna identificado por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

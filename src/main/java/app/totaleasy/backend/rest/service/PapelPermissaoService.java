@@ -27,9 +27,9 @@ public class PapelPermissaoService {
                 id.getNomePapel(),
                 id.getNomePermissao()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma relação entre papel e permissão identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma relação entre papel e permissão identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

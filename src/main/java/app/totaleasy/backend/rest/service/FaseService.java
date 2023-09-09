@@ -1,18 +1,17 @@
 package app.totaleasy.backend.rest.service;
 
-import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
-import app.totaleasy.backend.rest.model.BoletimUrna;
-import app.totaleasy.backend.rest.model.Fase;
-import app.totaleasy.backend.rest.repository.FaseRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
+import app.totaleasy.backend.rest.model.BoletimUrna;
+import app.totaleasy.backend.rest.model.Fase;
+import app.totaleasy.backend.rest.repository.FaseRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +28,9 @@ public class FaseService {
     public Fase findByNome(String nome) {
         return this.faseRepository
             .findByNomeEqualsIgnoreCase(nome)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma fase com o nome '%s'.", nome));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma fase com o nome '%s'.", nome)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

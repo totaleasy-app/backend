@@ -29,9 +29,9 @@ public class GrauInstrucaoService {
     public GrauInstrucao findByCodigoTSE(Integer codigoTSE) {
         return this.grauInstrucaoRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum grau de instrução com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum grau de instrução com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

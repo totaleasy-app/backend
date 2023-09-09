@@ -44,9 +44,9 @@ public class PartidoService {
     public Partido findByNumeroTSE(Integer numeroTSE) {
         return this.partidoRepository
             .findByNumeroTSE(numeroTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum partido com o número %d.", numeroTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum partido com o número %d.", numeroTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

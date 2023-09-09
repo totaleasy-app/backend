@@ -27,9 +27,9 @@ public class PermissaoService {
     public Permissao findByNome(String nome) {
         return this.permissaoRepository
             .findByNomeEqualsIgnoreCase(nome)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma permissao com o nome '%s'.", nome));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma permissao com o nome '%s'.", nome)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

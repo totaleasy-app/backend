@@ -42,9 +42,9 @@ public class SecaoService {
     public Secao findById(SecaoIdDTO id) {
         return this.secaoRepository
             .findByNumeroTSEAndZonaNumeroTSEAndZonaUfSiglaEqualsIgnoreCase(id.getNumeroTSESecao(), id.getNumeroTSEZona(), id.getSiglaUF())
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma seção identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma seção identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

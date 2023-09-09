@@ -1,9 +1,7 @@
 package app.totaleasy.backend.rest.service;
 
-import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
-import app.totaleasy.backend.rest.model.Candidato;
-import app.totaleasy.backend.rest.model.Candidatura;
-import app.totaleasy.backend.rest.repository.CandidatoRepository;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -11,8 +9,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
+import app.totaleasy.backend.rest.model.Candidato;
+import app.totaleasy.backend.rest.model.Candidatura;
+import app.totaleasy.backend.rest.repository.CandidatoRepository;
 
 @Service
 @CacheConfig(cacheNames = "candidato")
@@ -39,9 +39,9 @@ public class CandidatoService {
     public Candidato findByCodigoTSE(String codigoTSE) {
         return this.candidatoRepository
             .findByCodigoTSEEqualsIgnoreCase(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum candidato com o código %s.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum candidato com o código %s.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

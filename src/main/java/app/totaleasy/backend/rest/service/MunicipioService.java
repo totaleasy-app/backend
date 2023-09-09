@@ -30,9 +30,9 @@ public class MunicipioService {
     public Municipio findByCodigoTSE(Integer codigoTSE) {
         return this.municipioRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum município com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum município com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

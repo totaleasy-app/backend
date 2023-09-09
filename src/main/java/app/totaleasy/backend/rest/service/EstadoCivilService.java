@@ -29,9 +29,9 @@ public class EstadoCivilService {
     public EstadoCivil findByCodigoTSE(Integer codigoTSE) {
         return this.estadoCivilRepository
             .findByCodigoTSE(codigoTSE)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum estado civil com o código %d.", codigoTSE));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum estado civil com o código %d.", codigoTSE)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

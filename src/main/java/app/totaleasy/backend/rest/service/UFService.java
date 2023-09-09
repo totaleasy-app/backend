@@ -26,9 +26,9 @@ public class UFService {
     public UF findBySigla(String sigla) {
         return this.ufRepository
             .findBySiglaEqualsIgnoreCase(sigla)
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma UF com a sigla '%s'.", sigla));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma UF com a sigla '%s'.", sigla)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

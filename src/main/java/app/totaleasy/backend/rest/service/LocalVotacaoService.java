@@ -50,9 +50,9 @@ public class LocalVotacaoService {
 
         return this.localVotacaoRepository
             .findByNumeroTSEAndZonaNumeroTSEAndZonaUfSiglaEqualsIgnoreCase(id.getNumeroTSELocalVotacao(), id.getNumeroTSEZona(), id.getSiglaUF())
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrado nenhum local de votação identificado por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrado nenhum local de votação identificado por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

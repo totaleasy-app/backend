@@ -190,9 +190,9 @@ public class BoletimUrnaUsuarioService {
                 id.getSiglaUF(),
                 id.getCodigoTSEPleito()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma relação entre boletim de urna e usuário identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma relação entre boletim de urna e usuário identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")

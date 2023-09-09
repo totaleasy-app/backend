@@ -39,9 +39,9 @@ public class ApuracaoVotosPartidoBoletimUrnaService {
                 id.getSiglaUF(),
                 id.getCodigoTSEPleito()
             )
-            .orElseThrow(() -> {
-                throw new EntidadeNaoExisteException(String.format("Não foi encontrada nenhuma apuração de votos de partido por boletim de urna identificada por %s.", id));
-            });
+            .orElseThrow(() -> new EntidadeNaoExisteException(
+                String.format("Não foi encontrada nenhuma apuração de votos de partido por boletim de urna identificada por %s.", id)
+            ));
     }
 
     @Cacheable(key = "#root.methodName")
