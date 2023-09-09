@@ -1,0 +1,32 @@
+package app.totaleasy.backend.rest.repository;
+
+import app.totaleasy.backend.rest.model.AgregacaoSecao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+public interface AgregacaoSecaoRepository extends JpaRepository<AgregacaoSecao, Integer> {
+
+    boolean existsBySecaoPrincipalNumeroTSEAndSecaoPrincipalZonaNumeroTSEAndSecaoPrincipalZonaUfSiglaEqualsIgnoreCaseAndSecaoAgregadaNumeroTSEAndSecaoAgregadaZonaNumeroTSEAndSecaoAgregadaZonaUfSiglaEqualsIgnoreCaseAndProcessoEleitoralCodigoTSE(Integer numeroTSESecaoPrincipal, Integer numeroTSEZonaSecaoPrincipal, String siglaUFSecaoPrincipal, Integer numeroTSESecaoAgregada, Integer numeroTSEZonaSecaoAgregada, String siglaUFSecaoAgregada, Integer codigoTSEProcessoEleitoral);
+
+    Optional<AgregacaoSecao> findBySecaoPrincipalNumeroTSEAndSecaoPrincipalZonaNumeroTSEAndSecaoPrincipalZonaUfSiglaEqualsIgnoreCaseAndSecaoAgregadaNumeroTSEAndSecaoAgregadaZonaNumeroTSEAndSecaoAgregadaZonaUfSiglaEqualsIgnoreCaseAndProcessoEleitoralCodigoTSE(Integer numeroTSESecaoPrincipal, Integer numeroTSEZonaSecaoPrincipal, String siglaUFSecaoPrincipal, Integer numeroTSESecaoAgregada, Integer numeroTSEZonaSecaoAgregada, String siglaUFSecaoAgregada, Integer codigoTSEProcessoEleitoral);
+
+    @Modifying
+    @Transactional
+    void deleteBySecaoPrincipalNumeroTSEAndSecaoPrincipalZonaNumeroTSEAndSecaoPrincipalZonaUfSiglaEqualsIgnoreCaseAndSecaoAgregadaNumeroTSEAndSecaoAgregadaZonaNumeroTSEAndSecaoAgregadaZonaUfSiglaEqualsIgnoreCaseAndProcessoEleitoralCodigoTSE(Integer numeroTSESecaoPrincipal, Integer numeroTSEZonaSecaoPrincipal, String siglaUFSecaoPrincipal, Integer numeroTSESecaoAgregada, Integer numeroTSEZonaSecaoAgregada, String siglaUFSecaoAgregada, Integer codigoTSEProcessoEleitoral);
+
+    @Modifying
+    @Transactional
+    void deleteBySecaoPrincipalNumeroTSEAndSecaoPrincipalZonaNumeroTSEAndSecaoPrincipalZonaUfSiglaEqualsIgnoreCase(Integer numeroTSESecaoPrincipal, Integer numeroTSEZonaSecaoPrincipal, String siglaUFSecaoPrincipal);
+
+    @Modifying
+    @Transactional
+    void deleteBySecaoAgregadaNumeroTSEAndSecaoAgregadaZonaNumeroTSEAndSecaoAgregadaZonaUfSiglaEqualsIgnoreCase(Integer numeroTSESecaoAgregada, Integer numeroTSEZonaSecaoAgregada, String siglaUFSecaoAgregada);
+
+    @Modifying
+    @Transactional
+    void deleteByProcessoEleitoralCodigoTSE(Integer codigoTSEProcessoEleitoral);
+}

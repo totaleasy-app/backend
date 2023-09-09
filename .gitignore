@@ -1,0 +1,7 @@
+.gradle
+/build
+.idea
+*.iml
+*.ipr
+*.iws
+src/main/resources/application-production.yaml

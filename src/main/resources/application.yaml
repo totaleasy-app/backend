@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: development
+  datasource:
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: none
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+    time-zone: America/Sao_Paulo
+    locale: pt_BR
+  cache:
+    type: redis
+  data:
+    redis:
+      port: 6379
+      repositories:
+        enabled: false
