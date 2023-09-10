@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.CargoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.TipoCargoRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.CargoMapper;
 import app.totaleasy.backend.rest.mapper.TipoCargoMapper;
 import app.totaleasy.backend.rest.service.TipoCargoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/tipos-cargo")
@@ -27,28 +28,49 @@ public class TipoCargoController {
     private final CargoMapper cargoMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public TipoCargoRetrievalDTO findTipoCargo(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.tipoCargoMapper.toTipoCargoRetrievalDTO(this.tipoCargoService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findTipoCargo(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.tipoCargoMapper.toTipoCargoRetrievalDTO(this.tipoCargoService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<TipoCargoRetrievalDTO> findTiposCargo() {
-        return this.tipoCargoService
-            .findAll()
-            .stream()
-            .map(this.tipoCargoMapper::toTipoCargoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findTiposCargo() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.tipoCargoService
+                    .findAll()
+                    .stream()
+                    .map(this.tipoCargoMapper::toTipoCargoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/cargos")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<CargoRetrievalDTO> findCargos(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.tipoCargoService
-            .findCargos(codigoTSE)
-            .stream()
-            .map(this.cargoMapper::toCargoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findCargos(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.tipoCargoService
+                    .findCargos(codigoTSE)
+                    .stream()
+                    .map(this.cargoMapper::toCargoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

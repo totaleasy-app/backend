@@ -1,19 +1,22 @@
 package app.totaleasy.backend.rest.dto.id;
 
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 
 import jakarta.validation.constraints.NotNull;
 
-import lombok.*;
-
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CandidaturaIdDTO {
+public class CandidaturaIdDTO implements ValidatableDTO {
 
     @NotNull(message = "O número do candidato deve ser informado para identificar uma candidatura.")
     private Integer numeroTSECandidato;
@@ -24,6 +27,7 @@ public class CandidaturaIdDTO {
     @NotNull(message = "O código da eleição deve ser informado para identificar uma candidatura.")
     private Integer codigoTSEEleicao;
 
+    @Override
     public void validate() {
         if (this.numeroTSECandidato == null) {
             throw new CampoFaltanteException("O número do candidato deve ser informado para identificar uma candidatura.");

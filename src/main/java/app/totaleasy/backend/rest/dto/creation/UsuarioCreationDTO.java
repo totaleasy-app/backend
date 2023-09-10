@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 
@@ -22,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(doNotUseGetters = true)
-public class UsuarioCreationDTO {
+public class UsuarioCreationDTO implements ValidatableDTO {
 
     @NotBlank(message = "O campo 'username' deve ser informado ao criar um usuário.")
     @Size(min = 1, max = 31, message = "O campo 'username' deve possuir no mínimo 1 caractere e no máximo 31 caracteres.")
@@ -41,6 +42,7 @@ public class UsuarioCreationDTO {
     @NotEmpty(message = "O campo 'papeis' deve ser informado ao criar um usuário.")
     private Set<String> papeis;
 
+    @Override
     public void validate() {
         if (StringUtils.isBlank(this.username)) {
             throw new CampoFaltanteException("O campo 'username' deve ser informado ao criar um usuário.");

@@ -1,21 +1,21 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.ApuracaoVotosPartidoBoletimUrnaRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.CandidaturaRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.PartidoRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.ApuracaoVotosPartidoBoletimUrnaMapper;
 import app.totaleasy.backend.rest.mapper.CandidaturaMapper;
 import app.totaleasy.backend.rest.mapper.PartidoMapper;
 import app.totaleasy.backend.rest.service.PartidoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/partidos")
@@ -31,40 +31,66 @@ public class PartidoController {
     private final ApuracaoVotosPartidoBoletimUrnaMapper apuracaoVotosPartidoBoletimUrnaMapper;
 
     @GetMapping(value = "/{numeroTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public PartidoRetrievalDTO findPartido(@PathVariable("numeroTSE") Integer numeroTSE) {
-        return this.partidoMapper.toPartidoRetrievalDTO(this.partidoService.findByNumeroTSE(numeroTSE));
+    public ResponseEntity<ApiResponse> findPartido(@PathVariable("numeroTSE") Integer numeroTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.partidoMapper.toPartidoRetrievalDTO(this.partidoService.findByNumeroTSE(numeroTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<PartidoRetrievalDTO> findPartidos() {
-        return this.partidoService
-            .findAll()
-            .stream()
-            .map(this.partidoMapper::toPartidoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findPartidos() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.partidoService
+                    .findAll()
+                    .stream()
+                    .map(this.partidoMapper::toPartidoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{numeroTSE}/candidaturas")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<CandidaturaRetrievalDTO> findCandidaturas(@PathVariable("numeroTSE") Integer numeroTSE) {
-        return this.partidoService
-            .findCandidaturas(numeroTSE)
-            .stream()
-            .map(this.candidaturaMapper::toCandidaturaRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findCandidaturas(@PathVariable("numeroTSE") Integer numeroTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.partidoService
+                    .findCandidaturas(numeroTSE)
+                    .stream()
+                    .map(this.candidaturaMapper::toCandidaturaRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{numeroTSE}/apuracoes-votos-boletim-urna")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<ApuracaoVotosPartidoBoletimUrnaRetrievalDTO> findApuracoesVotosBoletimUrna(
-        @PathVariable("numeroTSE") Integer numeroTSE
-    ) {
-        return this.partidoService
-            .findApuracoesVotosBoletimUrna(numeroTSE)
-            .stream()
-            .map(this.apuracaoVotosPartidoBoletimUrnaMapper::toApuracaoVotosPartidoBoletimUrnaRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findApuracoesVotosBoletimUrna(@PathVariable("numeroTSE") Integer numeroTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.partidoService
+                    .findApuracoesVotosBoletimUrna(numeroTSE)
+                    .stream()
+                    .map(this.apuracaoVotosPartidoBoletimUrnaMapper::toApuracaoVotosPartidoBoletimUrnaRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

@@ -2,6 +2,7 @@ package app.totaleasy.backend.rest.dto.request;
 
 import org.apache.commons.lang3.StringUtils;
 
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AuthenticationRequestDTO {
+public class AuthenticationRequestDTO implements ValidatableDTO {
 
     @NotBlank(message = "O username deve ser informado para autenticar um usuário.")
     @Size(min = 1, max = 31, message = "O username deve ter no mínimo 1 caractere e no máximo 31 caracteres.")
@@ -27,6 +28,7 @@ public class AuthenticationRequestDTO {
     @Size(min = 8, max = 72, message = "A senha deve ter no mínimo 8 caracteres e no máximo 72 caracteres.")
     private String senha;
 
+    @Override
     public void validate() {
         if (StringUtils.isBlank(this.username)) {
             throw new CampoFaltanteException("O username deve ser informado para autenticar um usuário.");

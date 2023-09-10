@@ -1,5 +1,8 @@
 package app.totaleasy.backend.rest.dto.id;
 
+import org.apache.commons.lang3.StringUtils;
+
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 
@@ -7,18 +10,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import lombok.*;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class BoletimUrnaUsuarioIdDTO {
+public class BoletimUrnaUsuarioIdDTO implements ValidatableDTO {
 
     @NotBlank(message = "O username deve ser informado para identificar uma relação entre boletim de urna e usuário.")
     @Size(min = 1, max = 31, message = "O username deve possuir no mínimo 1 caractere e no máximo 31 caracteres.")
@@ -37,6 +40,7 @@ public class BoletimUrnaUsuarioIdDTO {
     @NotNull(message = "O código do pleito deve ser informado para identificar uma relação entre boletim de urna e usuário.")
     private Integer codigoTSEPleito;
 
+    @Override
     public void validate() {
         if (StringUtils.isBlank(this.username)) {
             throw new CampoFaltanteException("O username deve ser informado para identificar uma relação entre boletim de urna e usuário.");

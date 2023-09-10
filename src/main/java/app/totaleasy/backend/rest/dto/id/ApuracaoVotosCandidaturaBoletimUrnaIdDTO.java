@@ -1,5 +1,8 @@
 package app.totaleasy.backend.rest.dto.id;
 
+import org.apache.commons.lang3.StringUtils;
+
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 
@@ -7,18 +10,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import lombok.*;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ApuracaoVotosCandidaturaBoletimUrnaIdDTO {
+public class ApuracaoVotosCandidaturaBoletimUrnaIdDTO implements ValidatableDTO {
 
     @NotNull(message = "O número do candidato deve ser informado para identificar uma apuração de votos de candidatura de boletim de urna.")
     private Integer numeroTSECandidato;
@@ -42,6 +45,7 @@ public class ApuracaoVotosCandidaturaBoletimUrnaIdDTO {
     @NotNull(message = "O código do pleito deve ser informado para identificar uma apuração de votos de candidatura de boletim de urna.")
     private Integer codigoTSEPleito;
 
+    @Override
     public void validate() {
         if (this.numeroTSECandidato == null) {
             throw new CampoFaltanteException("O número do candidato deve ser informado para identificar uma apuração de votos de candidatura de boletim de urna.");

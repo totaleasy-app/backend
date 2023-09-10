@@ -18,7 +18,7 @@ public class DataTypeConverter {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern(format));
     }
 
-    public static String toJSON(Object object) throws JsonProcessingException {
+    public static String toJSONString(Object object) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.registerModule(new JavaTimeModule());

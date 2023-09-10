@@ -1,21 +1,21 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.PapelRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.PermissaoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.UsuarioRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.PapelMapper;
 import app.totaleasy.backend.rest.mapper.PermissaoMapper;
 import app.totaleasy.backend.rest.mapper.UsuarioMapper;
 import app.totaleasy.backend.rest.service.PapelService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/papeis")
@@ -31,38 +31,66 @@ public class PapelController {
     private final UsuarioMapper usuarioMapper;
 
     @GetMapping(value = "/{nome}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public PapelRetrievalDTO findPapel(@PathVariable("nome") String nome) {
-        return this.papelMapper.toPapelRetrievalDTO(this.papelService.findByNome(nome));
+    public ResponseEntity<ApiResponse> findPapel(@PathVariable("nome") String nome) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.papelMapper.toPapelRetrievalDTO(this.papelService.findByNome(nome))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<PapelRetrievalDTO> findPapeis() {
-        return this.papelService
-            .findAll()
-            .stream()
-            .map(this.papelMapper::toPapelRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findPapeis() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.papelService
+                    .findAll()
+                    .stream()
+                    .map(this.papelMapper::toPapelRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{nome}/permissoes")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<PermissaoRetrievalDTO> findPermissoes(@PathVariable("nome") String nome) {
-        return this.papelService
-            .findPermissoes(nome)
-            .stream()
-            .map(this.permissaoMapper::toPermissaoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findPermissoes(@PathVariable("nome") String nome) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.papelService
+                    .findPermissoes(nome)
+                    .stream()
+                    .map(this.permissaoMapper::toPermissaoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{nome}/usuarios")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<UsuarioRetrievalDTO> findUsuarios(@PathVariable("nome") String nome) {
-        return this.papelService
-            .findUsuarios(nome)
-            .stream()
-            .map(this.usuarioMapper::toUsuarioRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findUsuarios(@PathVariable("nome") String nome) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.papelService
+                    .findUsuarios(nome)
+                    .stream()
+                    .map(this.usuarioMapper::toUsuarioRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

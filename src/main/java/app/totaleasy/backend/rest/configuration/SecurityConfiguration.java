@@ -38,10 +38,14 @@ public class SecurityConfiguration {
         return httpSecurity
             .cors(withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
+            .securityMatcher("/api/**")
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
                 .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                 .requestMatchers("/api/usuarios/authenticate").permitAll()
                 .anyRequest().authenticated()
+            )
+            .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer
+                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
             )
             .sessionManagement(sessionManagementCustomizer -> sessionManagementCustomizer
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -64,7 +68,11 @@ public class SecurityConfiguration {
             "Authorization", "Access-Control-Allow-Origin", "Content-Type", "X-Requested-With",
             "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"
         ));
-        configuration.setExposedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(
+            "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "Authorization"
+        ));
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 

@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.RegiaoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.UFRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.RegiaoMapper;
 import app.totaleasy.backend.rest.mapper.UFMapper;
 import app.totaleasy.backend.rest.service.RegiaoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/regioes")
@@ -27,28 +28,46 @@ public class RegiaoController {
     private final UFMapper ufMapper;
 
     @GetMapping(value = "/{sigla}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public RegiaoRetrievalDTO findRegiao(@PathVariable("sigla") String sigla) {
-        return this.regiaoMapper.toRegiaoRetrievalDTO(this.regiaoService.findBySigla(sigla));
+    public ResponseEntity<ApiResponse> findRegiao(@PathVariable("sigla") String sigla) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(status, this.regiaoMapper.toRegiaoRetrievalDTO(this.regiaoService.findBySigla(sigla))),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<RegiaoRetrievalDTO> findRegioes() {
-        return this.regiaoService
-            .findAll()
-            .stream()
-            .map(this.regiaoMapper::toRegiaoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findRegioes() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.regiaoService
+                    .findAll()
+                    .stream()
+                    .map(this.regiaoMapper::toRegiaoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{sigla}/ufs")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<UFRetrievalDTO> findUFs(@PathVariable("sigla") String sigla) {
-        return this.regiaoService
-            .findUFs(sigla)
-            .stream()
-            .map(this.ufMapper::toUFRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findUFs(@PathVariable("sigla") String sigla) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.regiaoService
+                    .findUFs(sigla)
+                    .stream()
+                    .map(this.ufMapper::toUFRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

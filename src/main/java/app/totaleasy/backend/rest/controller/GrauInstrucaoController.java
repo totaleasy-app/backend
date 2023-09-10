@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.CandidatoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.GrauInstrucaoRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.CandidatoMapper;
 import app.totaleasy.backend.rest.mapper.GrauInstrucaoMapper;
 import app.totaleasy.backend.rest.service.GrauInstrucaoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/graus-instrucao")
@@ -27,28 +28,49 @@ public class GrauInstrucaoController {
     private final CandidatoMapper candidatoMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public GrauInstrucaoRetrievalDTO findGrauInstrucao(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.grauInstrucaoMapper.toGrauInstrucaoRetrievalDTO(this.grauInstrucaoService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findGrauInstrucao(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.grauInstrucaoMapper.toGrauInstrucaoRetrievalDTO(this.grauInstrucaoService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<GrauInstrucaoRetrievalDTO> findGrausInstrucao() {
-        return this.grauInstrucaoService
-            .findAll()
-            .stream()
-            .map(this.grauInstrucaoMapper::toGrauInstrucaoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findGrausInstrucao() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.grauInstrucaoService
+                    .findAll()
+                    .stream()
+                    .map(this.grauInstrucaoMapper::toGrauInstrucaoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/candidatos")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<CandidatoRetrievalDTO> findCandidatos(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.grauInstrucaoService
-            .findCandidatos(codigoTSE)
-            .stream()
-            .map(this.candidatoMapper::toCandidatoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findCandidatos(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.grauInstrucaoService
+                    .findCandidatos(codigoTSE)
+                    .stream()
+                    .map(this.candidatoMapper::toCandidatoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

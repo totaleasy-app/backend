@@ -1,9 +1,15 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.AgregacaoSecaoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.PleitoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.ProcessoEleitoralRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.SecaoRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.AgregacaoSecaoMapper;
 import app.totaleasy.backend.rest.mapper.PleitoMapper;
 import app.totaleasy.backend.rest.mapper.ProcessoEleitoralMapper;
@@ -11,13 +17,6 @@ import app.totaleasy.backend.rest.mapper.SecaoMapper;
 import app.totaleasy.backend.rest.service.ProcessoEleitoralService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/processos-eleitorais")
@@ -35,49 +34,84 @@ public class ProcessoEleitoralController {
     private final AgregacaoSecaoMapper agregacaoSecaoMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public ProcessoEleitoralRetrievalDTO findProcessoEleitoral(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.processoEleitoralMapper
-            .toProcessoEleitoralRetrievalDTO(this.processoEleitoralService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findProcessoEleitoral(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.processoEleitoralMapper
+                    .toProcessoEleitoralRetrievalDTO(this.processoEleitoralService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<ProcessoEleitoralRetrievalDTO> findProcessosEleitorais() {
-        return this.processoEleitoralService
-            .findAll()
-            .stream()
-            .map(this.processoEleitoralMapper::toProcessoEleitoralRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findProcessosEleitorais() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.processoEleitoralService
+                    .findAll()
+                    .stream()
+                    .map(this.processoEleitoralMapper::toProcessoEleitoralRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/secoes")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<SecaoRetrievalDTO> findSecoes(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.processoEleitoralService
-            .findSecoes(codigoTSE)
-            .stream()
-            .map(this.secaoMapper::toSecaoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findSecoes(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.processoEleitoralService
+                    .findSecoes(codigoTSE)
+                    .stream()
+                    .map(this.secaoMapper::toSecaoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/agregacoes-secao")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<AgregacaoSecaoRetrievalDTO> findAgregacoesSecao(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.processoEleitoralService
-            .findSecoesAgregadas(codigoTSE)
-            .stream()
-            .map(this.agregacaoSecaoMapper::toAgregacaoSecaoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findAgregacoesSecao(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.processoEleitoralService
+                    .findSecoesAgregadas(codigoTSE)
+                    .stream()
+                    .map(this.agregacaoSecaoMapper::toAgregacaoSecaoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/pleitos")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<PleitoRetrievalDTO> findPleitos(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.processoEleitoralService
-            .findPleitos(codigoTSE)
-            .stream()
-            .map(this.pleitoMapper::toPleitoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findPleitos(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.processoEleitoralService
+                    .findPleitos(codigoTSE)
+                    .stream()
+                    .map(this.pleitoMapper::toPleitoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

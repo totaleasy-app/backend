@@ -10,8 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import app.totaleasy.backend.rest.dto.response.ApiErrorResponse;
-import app.totaleasy.backend.rest.exception.ApiError;
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.model.Usuario;
 import app.totaleasy.backend.rest.service.UsuarioService;
 import app.totaleasy.backend.rest.util.DataTypeConverter;
@@ -38,10 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull HttpServletRequest request,
         @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
-    ) throws
-        ServletException,
-        IOException
-    {
+    ) throws ServletException, IOException {
         try {
             String authorizationHeader = request.getHeader("Authorization");
 
@@ -75,13 +71,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
 
-            response.getWriter().write(DataTypeConverter.toJSON(
-                new ApiErrorResponse(
-                    new ApiError("O seu token de acesso é inválido. Autentique-se novamente."),
-                    "Falha de autenticação.",
-                    HttpStatus.UNAUTHORIZED
+            response.getWriter().write(
+                DataTypeConverter.toJSONString(
+                    new ApiResponse(
+                        HttpStatus.UNAUTHORIZED,
+                        "O seu token de acesso é inválido. Autentique-se novamente."
+                    )
                 )
-            ));
+            );
         }
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ApiError {
+public class Erro {
 
     protected final String message;
 }

@@ -4,8 +4,11 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
+import org.postgresql.util.PSQLException;
+
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ import app.totaleasy.backend.rest.dto.api.ApiError;
 import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.exception.EntidadeJaExisteException;
 import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
+import app.totaleasy.backend.rest.exception.TokenExpiradoException;
+import app.totaleasy.backend.rest.exception.ErroValidacao;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -75,6 +80,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         apiError.addValidationErrors(ex.getConstraintViolations());
 
         return this.buildResponseEntity(new ApiResponse(HttpStatus.BAD_REQUEST, apiError));
+    }
+
+    @ExceptionHandler(value = PSQLException.class)
+    public ResponseEntity<Object> handlePSQLExceptionException(PSQLException psqlException) {
+        return this.buildResponseEntity(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, psqlException.getMessage()));
     }
 
     @Override
@@ -212,6 +222,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             new ApiResponse(
                 HttpStatus.BAD_REQUEST,
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage())
+            )
+        );
+    }
+
+    @ExceptionHandler(value = TokenExpiradoException.class)
+    public ResponseEntity<Object> handleTokenExpiradoException(TokenExpiradoException tokenExpiradoException) {
+        return this.buildResponseEntity(new ApiResponse(HttpStatus.UNAUTHORIZED, tokenExpiradoException.getMessage()));
+    }
+
+    @ExceptionHandler(value = ConversionFailedException.class)
+    public ResponseEntity<Object> handleConversionFailed(ConversionFailedException conversionFailedException) {
+        return this.buildResponseEntity(
+            new ApiResponse(
+                HttpStatus.BAD_REQUEST,
+                new ErroValidacao(
+                    Objects.requireNonNull(conversionFailedException.getValue()).toString(),
+                    conversionFailedException.getCause().getMessage()
+                )
             )
         );
     }

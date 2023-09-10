@@ -1,5 +1,8 @@
 package app.totaleasy.backend.rest.dto.id;
 
+import org.apache.commons.lang3.StringUtils;
+
+import app.totaleasy.backend.rest.dto.ValidatableDTO;
 import app.totaleasy.backend.rest.exception.CampoFaltanteException;
 import app.totaleasy.backend.rest.exception.ValorInvalidoException;
 
@@ -7,18 +10,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import lombok.*;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SecaoIdDTO {
+public class SecaoIdDTO implements ValidatableDTO {
 
     @NotNull(message = "O número da seção deve ser informado para identificar uma seção.")
     private Integer numeroTSESecao;
@@ -30,6 +33,7 @@ public class SecaoIdDTO {
     @Size(min = 2, max = 2, message = "A sigla da UF deve possuir 2 caracteres.")
     private String siglaUF;
 
+    @Override
     public void validate() {
         if (this.numeroTSESecao == null) {
             throw new CampoFaltanteException("O número da seção deve ser informado para identificar uma seção.");

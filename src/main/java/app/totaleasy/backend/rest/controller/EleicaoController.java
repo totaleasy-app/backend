@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.CargoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.EleicaoRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.CargoMapper;
 import app.totaleasy.backend.rest.mapper.EleicaoMapper;
 import app.totaleasy.backend.rest.service.EleicaoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/eleicoes")
@@ -27,28 +28,49 @@ public class EleicaoController {
     private final CargoMapper cargoMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public EleicaoRetrievalDTO findEleicao(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.eleicaoMapper.toEleicaoRetrievalDTO(this.eleicaoService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findEleicao(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.eleicaoMapper.toEleicaoRetrievalDTO(this.eleicaoService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<EleicaoRetrievalDTO> findEleicoes() {
-        return this.eleicaoService
-            .findAll()
-            .stream()
-            .map(this.eleicaoMapper::toEleicaoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findEleicoes() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.eleicaoService
+                    .findAll()
+                    .stream()
+                    .map(this.eleicaoMapper::toEleicaoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/cargos")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<CargoRetrievalDTO> findCargos(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.eleicaoService
-            .findCargos(codigoTSE)
-            .stream()
-            .map(this.cargoMapper::toCargoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findCargos(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.eleicaoService
+                    .findCargos(codigoTSE)
+                    .stream()
+                    .map(this.cargoMapper::toCargoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

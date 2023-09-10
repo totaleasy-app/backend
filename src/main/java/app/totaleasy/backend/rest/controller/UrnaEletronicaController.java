@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.BoletimUrnaRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.UrnaEletronicaRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.BoletimUrnaMapper;
 import app.totaleasy.backend.rest.mapper.UrnaEletronicaMapper;
 import app.totaleasy.backend.rest.service.UrnaEletronicaService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/urnas-eletronicas")
@@ -27,29 +28,50 @@ public class UrnaEletronicaController {
     private final BoletimUrnaMapper boletimUrnaMapper;
 
     @GetMapping(value = "/{numeroSerie}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public UrnaEletronicaRetrievalDTO findUrnaEletronica(@PathVariable("numeroSerie") Integer numeroSerie) {
-        return this.urnaEletronicaMapper
-            .toUrnaEletronicaRetrievalDTO(this.urnaEletronicaService.findByNumeroSerie(numeroSerie));
+    public ResponseEntity<ApiResponse> findUrnaEletronica(@PathVariable("numeroSerie") Integer numeroSerie) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.urnaEletronicaMapper
+                    .toUrnaEletronicaRetrievalDTO(this.urnaEletronicaService.findByNumeroSerie(numeroSerie))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<UrnaEletronicaRetrievalDTO> findUrnasEletronicas() {
-        return this.urnaEletronicaService
-            .findAll()
-            .stream()
-            .map(this.urnaEletronicaMapper::toUrnaEletronicaRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findUrnasEletronicas() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.urnaEletronicaService
+                    .findAll()
+                    .stream()
+                    .map(this.urnaEletronicaMapper::toUrnaEletronicaRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{numeroSerie}/boletins-urna")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<BoletimUrnaRetrievalDTO> findBoletinsUrna(@PathVariable("numeroSerie") Integer numeroSerie) {
-        return this.urnaEletronicaService
-            .findBoletinsUrna(numeroSerie)
-            .stream()
-            .map(this.boletimUrnaMapper::toBoletimUrnaRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findBoletinsUrna(@PathVariable("numeroSerie") Integer numeroSerie) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.urnaEletronicaService
+                    .findBoletinsUrna(numeroSerie)
+                    .stream()
+                    .map(this.boletimUrnaMapper::toBoletimUrnaRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

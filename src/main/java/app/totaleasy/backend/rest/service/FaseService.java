@@ -11,6 +11,7 @@ import app.totaleasy.backend.rest.exception.EntidadeNaoExisteException;
 import app.totaleasy.backend.rest.model.BoletimUrna;
 import app.totaleasy.backend.rest.model.Fase;
 import app.totaleasy.backend.rest.repository.FaseRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Service

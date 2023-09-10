@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.CandidatoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.CandidaturaRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.CandidatoMapper;
 import app.totaleasy.backend.rest.mapper.CandidaturaMapper;
 import app.totaleasy.backend.rest.service.CandidatoService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/candidatos")
@@ -27,28 +28,49 @@ public class CandidatoController {
     private final CandidaturaMapper candidaturaMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public CandidatoRetrievalDTO findCandidato(@PathVariable("codigoTSE") String codigoTSE) {
-        return this.candidatoMapper.toCandidatoRetrievalDTO(this.candidatoService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findCandidato(@PathVariable("codigoTSE") String codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.candidatoMapper.toCandidatoRetrievalDTO(this.candidatoService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<CandidatoRetrievalDTO> findCandidatos() {
-        return this.candidatoService
-            .findAll()
-            .stream()
-            .map(this.candidatoMapper::toCandidatoRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findCandidatos() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.candidatoService
+                    .findAll()
+                    .stream()
+                    .map(this.candidatoMapper::toCandidatoRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/candidaturas")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<CandidaturaRetrievalDTO> findCandidaturas(@PathVariable("codigoTSE") String codigoTSE) {
-        return this.candidatoService
-            .findCandidaturas(codigoTSE)
-            .stream()
-            .map(this.candidaturaMapper::toCandidaturaRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findCandidaturas(@PathVariable("codigoTSE") String codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.candidatoService
+                    .findCandidaturas(codigoTSE)
+                    .stream()
+                    .map(this.candidaturaMapper::toCandidaturaRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }

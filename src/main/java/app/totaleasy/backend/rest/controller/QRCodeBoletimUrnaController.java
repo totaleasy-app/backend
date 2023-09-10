@@ -1,22 +1,19 @@
 package app.totaleasy.backend.rest.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.dto.id.QRCodeBoletimUrnaIdDTO;
-import app.totaleasy.backend.rest.dto.retrieval.QRCodeBoletimUrnaRetrievalDTO;
 import app.totaleasy.backend.rest.mapper.QRCodeBoletimUrnaMapper;
 import app.totaleasy.backend.rest.service.QRCodeBoletimUrnaService;
 
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/qr-codes-boletim-urna")
@@ -28,18 +25,32 @@ public class QRCodeBoletimUrnaController {
     private final QRCodeBoletimUrnaMapper qrCodeBoletimUrnaMapper;
 
     @GetMapping(params = {"indice", "numeroTSESecao", "numeroTSEZona", "siglaUF", "codigoTSEPleito"})
-    @ResponseStatus(value = HttpStatus.OK)
-    public QRCodeBoletimUrnaRetrievalDTO findQRCodeBoletimUrna(@Valid QRCodeBoletimUrnaIdDTO id) {
-        return this.qrCodeBoletimUrnaMapper.toQRCodeBoletimUrnaRetrievalDTO(this.qrCodeBoletimUrnaService.findById(id));
+    public ResponseEntity<ApiResponse> findQRCodeBoletimUrna(@Valid QRCodeBoletimUrnaIdDTO id) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.qrCodeBoletimUrnaMapper.toQRCodeBoletimUrnaRetrievalDTO(this.qrCodeBoletimUrnaService.findById(id))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<QRCodeBoletimUrnaRetrievalDTO> findQRCodesBoletimUrna() {
-        return this.qrCodeBoletimUrnaService
-            .findAll()
-            .stream()
-            .map(this.qrCodeBoletimUrnaMapper::toQRCodeBoletimUrnaRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findQRCodesBoletimUrna() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.qrCodeBoletimUrnaService
+                    .findAll()
+                    .stream()
+                    .map(this.qrCodeBoletimUrnaMapper::toQRCodeBoletimUrnaRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 }

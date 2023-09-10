@@ -22,6 +22,13 @@ public class ApiResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
     private final LocalDateTime timestamp;
 
+    public ApiResponse(HttpStatus status) {
+        this.status = status;
+        this.data = null;
+        this.error = null;
+        this.timestamp = LocalDateTime.now();
+    }
+
     public ApiResponse(HttpStatus status, Object object) {
         if (status.isError()) {
             this.error = object;

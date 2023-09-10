@@ -1,19 +1,20 @@
 package app.totaleasy.backend.rest.controller;
 
-import app.totaleasy.backend.rest.dto.retrieval.LocalVotacaoRetrievalDTO;
-import app.totaleasy.backend.rest.dto.retrieval.MunicipioRetrievalDTO;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import app.totaleasy.backend.rest.dto.api.ApiResponse;
 import app.totaleasy.backend.rest.mapper.LocalVotacaoMapper;
 import app.totaleasy.backend.rest.mapper.MunicipioMapper;
 import app.totaleasy.backend.rest.service.MunicipioService;
 
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/municipios")
@@ -27,28 +28,49 @@ public class MunicipioController {
     private final LocalVotacaoMapper localVotacaoMapper;
 
     @GetMapping(value = "/{codigoTSE}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public MunicipioRetrievalDTO findMunicipio(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.municipioMapper.toMunicipioRetrievalDTO(this.municipioService.findByCodigoTSE(codigoTSE));
+    public ResponseEntity<ApiResponse> findMunicipio(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.municipioMapper.toMunicipioRetrievalDTO(this.municipioService.findByCodigoTSE(codigoTSE))
+            ),
+            status
+        );
     }
 
     @GetMapping
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<MunicipioRetrievalDTO> findMunicipios() {
-        return this.municipioService
-            .findAll()
-            .stream()
-            .map(this.municipioMapper::toMunicipioRetrievalDTO)
-            .toList();
+    public ResponseEntity<ApiResponse> findMunicipios() {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.municipioService
+                    .findAll()
+                    .stream()
+                    .map(this.municipioMapper::toMunicipioRetrievalDTO)
+                    .toList()
+            ),
+            status
+        );
     }
 
     @GetMapping(value = "/{codigoTSE}/locais-votacao")
-    @ResponseStatus(value = HttpStatus.OK)
-    public Set<LocalVotacaoRetrievalDTO> findLocaisVotacao(@PathVariable("codigoTSE") Integer codigoTSE) {
-        return this.municipioService
-            .findLocaisVotacao(codigoTSE)
-            .stream()
-            .map(this.localVotacaoMapper::toLocalVotacaoRetrievalDTO)
-            .collect(Collectors.toSet());
+    public ResponseEntity<ApiResponse> findLocaisVotacao(@PathVariable("codigoTSE") Integer codigoTSE) {
+        HttpStatus status = HttpStatus.OK;
+
+        return new ResponseEntity<>(
+            new ApiResponse(
+                status,
+                this.municipioService
+                    .findLocaisVotacao(codigoTSE)
+                    .stream()
+                    .map(this.localVotacaoMapper::toLocalVotacaoRetrievalDTO)
+                    .collect(Collectors.toSet())
+            ),
+            status
+        );
     }
 }
